@@ -63,15 +63,15 @@ export interface CompatibilityCheckResult {
 }
 
 export const CATEGORY_LABELS: Record<ComponentCategory, string> = {
-  chain: 'Chain',
-  cassette: 'Cassette',
-  rear_derailleur: 'Rear Derailleur',
-  front_derailleur: 'Front Derailleur',
-  crankset: 'Crankset',
-  shifters: 'Shifters',
-  brake_caliper: 'Brake Calipers',
-  brake_lever: 'Brake Levers',
-  bottom_bracket: 'Bottom Bracket',
+  chain: 'Kette',
+  cassette: 'Kassette',
+  rear_derailleur: 'Hinteres Schaltwerk',
+  front_derailleur: 'Vorderes Schaltwerk',
+  crankset: 'Kurbelgarnitur',
+  shifters: 'Schalthebel',
+  brake_caliper: 'Bremssattel',
+  brake_lever: 'Bremshebel',
+  bottom_bracket: 'Tretlager',
 };
 
 export const CATEGORY_ORDER: ComponentCategory[] = [

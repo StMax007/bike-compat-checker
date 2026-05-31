@@ -9,18 +9,18 @@ interface StatusBadgeProps {
 const config = {
   compatible: {
     icon: CheckCircle,
-    label: 'Compatible',
-    className: 'text-green-400 bg-green-400/10',
+    label: 'Kompatibel',
+    className: 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-400/10',
   },
   adapter: {
     icon: AlertTriangle,
-    label: 'With Adapter',
-    className: 'text-yellow-400 bg-yellow-400/10',
+    label: 'Mit Adapter',
+    className: 'text-yellow-600 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-400/10',
   },
   incompatible: {
     icon: XCircle,
-    label: 'Incompatible',
-    className: 'text-red-400 bg-red-400/10',
+    label: 'Inkompatibel',
+    className: 'text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-400/10',
   },
 };
 

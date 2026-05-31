@@ -1,7 +1,7 @@
 import { Component } from '../types';
 
 const affiliateUrl = (model: string) =>
-  `https://www.bike-components.de/search/?q=${encodeURIComponent(model)}`;
+  `https://www.bike-components.de/de/s/?keywords=${encodeURIComponent(model)}`;
 
 export const components: Component[] = [
   // ══════════════════════════════════════════════════════════════

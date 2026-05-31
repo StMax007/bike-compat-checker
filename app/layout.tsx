@@ -6,9 +6,9 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'BikeCompat – Road Bike Component Compatibility Checker',
+  title: 'BikeCompat – Fahrrad-Kompatibilitätsprüfer',
   description:
-    'Check if road bike components are compatible with your groupset. Compare Shimano, SRAM, and Campagnolo components and estimate upgrade costs.',
+    'Prüfe, ob Rennrad-Komponenten mit deiner Schaltgruppe kompatibel sind. Shimano, SRAM und Campagnolo – Upgrade-Kosten berechnen.',
 };
 
 export default function RootLayout({
@@ -17,15 +17,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} min-h-screen bg-neutral-950 text-white antialiased`}>
+    <html lang="de">
+      <body className={`${inter.className} min-h-screen antialiased`}>
         <Navbar />
         <main>{children}</main>
-        <footer className="border-t border-neutral-800 py-8 text-center text-xs text-neutral-500">
+        <footer className="border-t border-gray-200 py-8 text-center text-xs text-gray-400 dark:border-neutral-800 dark:text-neutral-500">
           <p>
-            BikeCompat · Affiliate links – we may earn a commission ·{' '}
-            <a href="/about" className="underline hover:text-neutral-300">
-              About
+            BikeCompat · Affiliate-Links – wir erhalten ggf. eine Provision ·{' '}
+            <a href="/about" className="underline hover:text-gray-700 dark:hover:text-neutral-300">
+              Über uns
             </a>
           </p>
         </footer>
