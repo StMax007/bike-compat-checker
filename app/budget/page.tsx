@@ -31,6 +31,10 @@ export default function BudgetPage() {
 
   const isSelected = (c: Component) => cart.some((x) => x.id === c.id);
   const total = cart.reduce((s, c) => s + c.price_eur, 0);
+  const allItemsUrl =
+    cart.length > 0
+      ? `https://www.bike-components.de/de/s/?keywords=${encodeURIComponent(cart.map((c) => c.model_number).join(' '))}`
+      : '';
 
   const compatibleResults = (cat: ComponentCategory): CompatibilityResult[] =>
     (results?.[cat] ?? []).filter((r) => r.status !== 'incompatible');
@@ -118,7 +122,12 @@ export default function BudgetPage() {
                     <span className="text-sm text-gray-500 dark:text-neutral-400">Gesamtschätzung</span>
                     <span className="text-xl font-bold text-gray-900 dark:text-white">€{total.toLocaleString('de-DE')}</span>
                   </div>
-                  <a href="#" onClick={(e) => e.preventDefault()} className="block w-full rounded-lg bg-blue-600 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-blue-500">
+                  <a
+                    href={allItemsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full rounded-lg bg-blue-600 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-blue-500"
+                  >
                     Alle auf bike-components.de ansehen
                   </a>
                   <button onClick={() => setCart([])} className="mt-2 w-full rounded-lg border border-gray-200 py-2.5 text-sm text-gray-500 transition-colors hover:border-gray-300 hover:text-gray-700 dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-600 dark:hover:text-white">
