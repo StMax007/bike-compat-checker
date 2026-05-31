@@ -142,7 +142,7 @@ export default function CheckPage() {
                 {isExpanded && items.length > 0 && (
                   <div className="grid gap-3 border-t border-gray-200 p-5 dark:border-neutral-800 sm:grid-cols-2 lg:grid-cols-3">
                     {items.map((result) => (
-                      <ComponentCard key={result.component.id} component={result.component} status={result.status} explanation={result.explanation} adapter_name={result.adapter_name} />
+                      <ComponentCard key={result.component.id} component={result.component} status={result.status} explanation={result.explanation} adapter_name={result.adapter_name} sources={result.sources} />
                     ))}
                   </div>
                 )}

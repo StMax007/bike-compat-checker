@@ -2,200 +2,243 @@ import {
   Component,
   ComponentCategory,
   CompatibilityResult,
+  CompatibilitySource,
   CompatibilityStatus,
   Groupset,
 } from './types';
 import { groupsets, getGroupsetById } from './data/groupsets';
 import { components } from './data/components';
 import { CATEGORY_ORDER } from './types';
+import { SOURCES } from './data/sources';
 
 // ─── Compatibility group rules ────────────────────────────────────────────────
-// Defines which groups are fully cross-compatible, partially compatible, or not
 type CompatibilityGroupRule = {
   status: CompatibilityStatus;
   explanation: string;
   adapter_name?: string;
-  /** If specified, only applies to these categories */
   categories?: ComponentCategory[];
+  sources: CompatibilitySource[];
 };
 
 const GROUP_RULES: Record<string, Record<string, CompatibilityGroupRule>> = {
+  // ══════════════════════════════════════════════════════════
+  // SHIMANO 11s ROAD
+  // ══════════════════════════════════════════════════════════
   'shimano-11s-road': {
     'shimano-11s-road': {
       status: 'compatible',
-      explanation:
-        'Same compatibility group: Shimano 11-speed road (R7000/R8000/R9100) components are fully cross-compatible.',
+      explanation: 'Gleiche Kompatibilitätsgruppe: Shimano 11-Gang Rennrad (R7000/R8000/R9100) Komponenten sind vollständig untereinander kompatibel.',
+      sources: [SOURCES.shimano_road_rear_drivetrain, SOURCES.shimano_road_front_drivetrain],
     },
     'shimano-12s-road': {
       status: 'incompatible',
-      explanation:
-        'Shimano 11s and 12s road components use different shift ratios, chain pitch, and cassette interface. Not cross-compatible.',
+      explanation: 'Shimano 11-Gang und 12-Gang Komponenten verwenden unterschiedliche Schaltübersetzungen, Kettenteilung und Kassetteninterfaces. Nicht kreuzkompatibel.',
+      sources: [SOURCES.shimano_road_front_drivetrain, SOURCES.shimano_road_rear_drivetrain],
     },
     'sram-11s-road': {
       status: 'incompatible',
-      explanation:
-        'Shimano and SRAM use different cable pull ratios (2.8 mm vs 3.1 mm). Shifters cannot control each other\'s derailleurs.',
-      categories: ['shifters', 'rear_derailleur', 'front_derailleur'],
+      explanation: 'Shimano und SRAM verwenden unterschiedliche Seilzugwege (2,8 mm vs. 3,1 mm). Schalthebel steuern die Schaltwerke des jeweils anderen Herstellers nicht.',
+      sources: [SOURCES.sram_cable_pull],
     },
     'sram-axs-12s': {
       status: 'incompatible',
-      explanation: 'SRAM AXS is a 12-speed electronic system incompatible with Shimano mechanical 11-speed components.',
+      explanation: 'SRAM AXS ist ein 12-Gang elektronisches System, das mit mechanischen Shimano 11-Gang Komponenten inkompatibel ist.',
+      sources: [SOURCES.sram_axs_ecosystem],
     },
     'campagnolo-11s': {
       status: 'incompatible',
-      explanation:
-        'Campagnolo uses a different cable pull ratio (2.5 mm) and cassette interface. Not cross-compatible with Shimano.',
+      explanation: 'Campagnolo verwendet einen anderen Seilzugweg (2,5 mm) und ein anderes Kassetteninterface. Nicht kompatibel mit Shimano.',
+      sources: [SOURCES.campagnolo_cable_pull],
     },
     'campagnolo-12s': {
       status: 'incompatible',
-      explanation:
-        'Campagnolo 12s requires N3W freehub and uses different shift mechanics. Incompatible with Shimano 11s.',
+      explanation: 'Campagnolo 12-Gang erfordert den N3W-Freilaufkörper und verwendet andere Schaltmechanik. Inkompatibel mit Shimano 11-Gang.',
+      sources: [SOURCES.campagnolo_n3w, SOURCES.campagnolo_cable_pull],
     },
   },
+
+  // ══════════════════════════════════════════════════════════
+  // SHIMANO 12s ROAD (Di2)
+  // ══════════════════════════════════════════════════════════
   'shimano-12s-road': {
     'shimano-12s-road': {
       status: 'compatible',
-      explanation:
-        'Same compatibility group: Shimano 12-speed Di2 (R7100/R8100/R9200) components are fully cross-compatible.',
+      explanation: 'Gleiche Kompatibilitätsgruppe: Shimano 12-Gang Di2 (R7100/R8100/R9200) Komponenten sind vollständig untereinander kompatibel.',
+      sources: [SOURCES.shimano_road_front_drivetrain, SOURCES.shimano_road_rear_drivetrain],
     },
     'shimano-11s-road': {
       status: 'incompatible',
-      explanation:
-        'Shimano 12s Di2 uses electronic actuation and 12-speed cassettes. Not compatible with 11-speed mechanical components.',
+      explanation: 'Shimano 12-Gang Di2 verwendet elektronische Betätigung und 12-Gang Kassetten. Nicht kompatibel mit mechanischen 11-Gang Komponenten.',
+      sources: [SOURCES.shimano_road_front_drivetrain, SOURCES.shimano_road_rear_drivetrain],
     },
     'sram-11s-road': {
       status: 'incompatible',
-      explanation: 'Shimano 12s Di2 and SRAM 11s mechanical systems are fully incompatible.',
+      explanation: 'Shimano 12-Gang Di2 und SRAM 11-Gang mechanisch sind vollständig inkompatibel.',
+      sources: [SOURCES.sram_cable_pull],
     },
     'sram-axs-12s': {
       status: 'incompatible',
-      explanation: 'SRAM AXS and Shimano Di2 are both electronic but use different protocols and drivetrains.',
+      explanation: 'SRAM AXS und Shimano Di2 sind beide elektronisch, verwenden aber unterschiedliche Protokolle und Antriebssysteme.',
+      sources: [SOURCES.sram_axs_ecosystem],
     },
     'campagnolo-11s': {
       status: 'incompatible',
-      explanation: 'Campagnolo 11s components are incompatible with Shimano 12s Di2.',
+      explanation: 'Campagnolo 11-Gang Komponenten sind inkompatibel mit Shimano 12-Gang Di2.',
+      sources: [SOURCES.campagnolo_cable_pull],
     },
     'campagnolo-12s': {
       status: 'incompatible',
-      explanation: 'Campagnolo 12s and Shimano 12s Di2 use different standards throughout.',
+      explanation: 'Campagnolo 12-Gang und Shimano 12-Gang Di2 verwenden durchgehend unterschiedliche Standards.',
+      sources: [SOURCES.campagnolo_n3w, SOURCES.campagnolo_cable_pull],
     },
   },
+
+  // ══════════════════════════════════════════════════════════
+  // SRAM 11s ROAD
+  // ══════════════════════════════════════════════════════════
   'sram-11s-road': {
     'sram-11s-road': {
       status: 'compatible',
-      explanation:
-        'Same compatibility group: SRAM 11-speed road (Rival22/Force22/Red22) components are fully cross-compatible.',
+      explanation: 'Gleiche Kompatibilitätsgruppe: SRAM 11-Gang Rennrad (Rival22/Force22/Red22) Komponenten sind vollständig untereinander kompatibel.',
+      sources: [SOURCES.sram_11s_compatibility],
     },
     'shimano-11s-road': {
       status: 'incompatible',
-      explanation:
-        'SRAM uses a different cable pull ratio (3.1 mm) vs Shimano (2.8 mm). Shifters and derailleurs cannot mix.',
-      categories: ['shifters', 'rear_derailleur', 'front_derailleur'],
+      explanation: 'SRAM verwendet einen anderen Seilzugweg (3,1 mm) als Shimano (2,8 mm). Schalthebel und Schaltwerke verschiedener Hersteller sind nicht kompatibel.',
+      sources: [SOURCES.sram_cable_pull],
     },
     'shimano-12s-road': {
       status: 'incompatible',
-      explanation: 'SRAM 11s mechanical and Shimano 12s Di2 are incompatible in every aspect.',
+      explanation: 'SRAM 11-Gang mechanisch und Shimano 12-Gang Di2 sind in jeder Hinsicht inkompatibel.',
+      sources: [SOURCES.sram_11s_compatibility],
     },
     'sram-axs-12s': {
       status: 'incompatible',
-      explanation:
-        'SRAM AXS is a 12-speed electronic system. Not compatible with SRAM 11s mechanical components.',
+      explanation: 'SRAM AXS ist ein 12-Gang elektronisches System. Nicht kompatibel mit SRAM 11-Gang mechanischen Komponenten.',
+      sources: [SOURCES.sram_axs_ecosystem],
     },
     'campagnolo-11s': {
       status: 'incompatible',
-      explanation: 'SRAM and Campagnolo use different cable pull ratios and cassette interfaces.',
+      explanation: 'SRAM (3,1 mm Seilzug) und Campagnolo (2,5 mm) sind nicht kompatibel.',
+      sources: [SOURCES.sram_cable_pull, SOURCES.campagnolo_cable_pull],
     },
     'campagnolo-12s': {
       status: 'incompatible',
-      explanation: 'SRAM 11s and Campagnolo 12s are incompatible.',
+      explanation: 'SRAM 11-Gang und Campagnolo 12-Gang sind inkompatibel.',
+      sources: [SOURCES.sram_11s_compatibility, SOURCES.campagnolo_n3w],
     },
   },
+
+  // ══════════════════════════════════════════════════════════
+  // SRAM AXS 12s
+  // ══════════════════════════════════════════════════════════
   'sram-axs-12s': {
     'sram-axs-12s': {
       status: 'compatible',
-      explanation:
-        'Same compatibility group: SRAM AXS 12-speed (Rival/Force/Red AXS) components are fully cross-compatible within the AXS ecosystem.',
+      explanation: 'Gleiche Kompatibilitätsgruppe: SRAM AXS 12-Gang (Rival/Force/Red AXS) Komponenten sind vollständig untereinander im AXS-Ökosystem kompatibel.',
+      sources: [SOURCES.sram_axs_ecosystem, SOURCES.sram_xdr_freehub],
     },
     'shimano-11s-road': {
       status: 'incompatible',
-      explanation: 'SRAM AXS is electronic 12-speed; incompatible with Shimano mechanical 11-speed.',
+      explanation: 'SRAM AXS ist elektronisches 12-Gang; inkompatibel mit Shimano mechanischem 11-Gang.',
+      sources: [SOURCES.sram_axs_ecosystem],
     },
     'shimano-12s-road': {
       status: 'incompatible',
-      explanation: 'SRAM AXS and Shimano Di2 are both electronic but use entirely different systems.',
+      explanation: 'SRAM AXS und Shimano Di2 sind beide elektronisch, verwenden aber völlig unterschiedliche Systeme.',
+      sources: [SOURCES.sram_axs_ecosystem],
     },
     'sram-11s-road': {
       status: 'incompatible',
-      explanation: 'SRAM AXS 12s requires XDR freehub and is electronic — not compatible with SRAM 11s mechanical.',
+      explanation: 'SRAM AXS 12-Gang erfordert XDR-Freilaufkörper und ist elektronisch – nicht kompatibel mit SRAM 11-Gang mechanisch.',
+      sources: [SOURCES.sram_axs_ecosystem, SOURCES.sram_xdr_freehub],
     },
     'campagnolo-11s': {
       status: 'incompatible',
-      explanation: 'SRAM AXS and Campagnolo are incompatible.',
+      explanation: 'SRAM AXS und Campagnolo sind inkompatibel.',
+      sources: [SOURCES.sram_axs_ecosystem, SOURCES.campagnolo_cable_pull],
     },
     'campagnolo-12s': {
       status: 'incompatible',
-      explanation: 'SRAM AXS and Campagnolo 12s are incompatible.',
+      explanation: 'SRAM AXS und Campagnolo 12-Gang sind inkompatibel.',
+      sources: [SOURCES.sram_axs_ecosystem, SOURCES.campagnolo_n3w],
     },
   },
+
+  // ══════════════════════════════════════════════════════════
+  // CAMPAGNOLO 11s
+  // ══════════════════════════════════════════════════════════
   'campagnolo-11s': {
     'campagnolo-11s': {
       status: 'compatible',
-      explanation:
-        'Same compatibility group: Campagnolo 11-speed (Chorus/Record/Super Record) components are fully cross-compatible.',
+      explanation: 'Gleiche Kompatibilitätsgruppe: Campagnolo 11-Gang (Chorus/Record/Super Record) Komponenten sind vollständig untereinander kompatibel.',
+      sources: [SOURCES.campagnolo_11s_system],
     },
     'campagnolo-12s': {
       status: 'incompatible',
-      explanation:
-        'Campagnolo 11s and 12s are not cross-compatible. 12s requires N3W freehub and different chain pitch.',
+      explanation: 'Campagnolo 11-Gang und 12-Gang sind nicht kreuzkompatibel. 12-Gang erfordert N3W-Freilaufkörper und andere Kettenteilung.',
+      sources: [SOURCES.campagnolo_n3w, SOURCES.campagnolo_12s_system],
     },
     'shimano-11s-road': {
       status: 'incompatible',
-      explanation: 'Campagnolo uses a 2.5 mm cable pull ratio; Shimano uses 2.8 mm. Derailleurs are not cross-compatible.',
+      explanation: 'Campagnolo verwendet 2,5 mm Seilzugweg; Shimano verwendet 2,8 mm. Schaltwerke sind nicht kreuzkompatibel.',
+      sources: [SOURCES.campagnolo_cable_pull],
     },
     'shimano-12s-road': {
       status: 'incompatible',
-      explanation: 'Campagnolo 11s and Shimano 12s Di2 are completely incompatible.',
+      explanation: 'Campagnolo 11-Gang und Shimano 12-Gang Di2 sind vollständig inkompatibel.',
+      sources: [SOURCES.campagnolo_cable_pull],
     },
     'sram-11s-road': {
       status: 'incompatible',
-      explanation: 'Campagnolo (2.5 mm pull) and SRAM (3.1 mm pull) are not compatible.',
+      explanation: 'Campagnolo (2,5 mm Seilzug) und SRAM (3,1 mm) sind nicht kompatibel.',
+      sources: [SOURCES.campagnolo_cable_pull, SOURCES.sram_cable_pull],
     },
     'sram-axs-12s': {
       status: 'incompatible',
-      explanation: 'Campagnolo 11s and SRAM AXS 12s are incompatible.',
+      explanation: 'Campagnolo 11-Gang und SRAM AXS 12-Gang sind inkompatibel.',
+      sources: [SOURCES.campagnolo_cable_pull, SOURCES.sram_axs_ecosystem],
     },
   },
+
+  // ══════════════════════════════════════════════════════════
+  // CAMPAGNOLO 12s
+  // ══════════════════════════════════════════════════════════
   'campagnolo-12s': {
     'campagnolo-12s': {
       status: 'compatible',
-      explanation:
-        'Same compatibility group: Campagnolo 12-speed (Chorus/Record/Super Record 12s) components are fully cross-compatible. Requires N3W freehub body.',
+      explanation: 'Gleiche Kompatibilitätsgruppe: Campagnolo 12-Gang (Chorus/Record/Super Record 12s) Komponenten sind vollständig untereinander kompatibel. Erfordert N3W-Freilaufkörper.',
+      sources: [SOURCES.campagnolo_12s_system, SOURCES.campagnolo_n3w],
     },
     'campagnolo-11s': {
       status: 'incompatible',
-      explanation: 'Campagnolo 12s requires N3W freehub and different shift mechanics — not compatible with 11s.',
+      explanation: 'Campagnolo 12-Gang erfordert N3W-Freilaufkörper und andere Schaltmechanik – nicht kompatibel mit 11-Gang.',
+      sources: [SOURCES.campagnolo_n3w],
     },
     'shimano-11s-road': {
       status: 'incompatible',
-      explanation: 'Campagnolo 12s and Shimano 11s are incompatible.',
+      explanation: 'Campagnolo 12-Gang und Shimano 11-Gang sind inkompatibel.',
+      sources: [SOURCES.campagnolo_cable_pull],
     },
     'shimano-12s-road': {
       status: 'incompatible',
-      explanation: 'Campagnolo 12s and Shimano 12s use different standards throughout.',
+      explanation: 'Campagnolo 12-Gang und Shimano 12-Gang Di2 verwenden durchgehend unterschiedliche Standards.',
+      sources: [SOURCES.campagnolo_n3w, SOURCES.campagnolo_cable_pull],
     },
     'sram-11s-road': {
       status: 'incompatible',
-      explanation: 'Campagnolo 12s and SRAM 11s are incompatible.',
+      explanation: 'Campagnolo 12-Gang und SRAM 11-Gang sind inkompatibel.',
+      sources: [SOURCES.campagnolo_n3w, SOURCES.sram_cable_pull],
     },
     'sram-axs-12s': {
       status: 'incompatible',
-      explanation: 'Campagnolo 12s and SRAM AXS are incompatible.',
+      explanation: 'Campagnolo 12-Gang und SRAM AXS sind inkompatibel.',
+      sources: [SOURCES.campagnolo_n3w, SOURCES.sram_axs_ecosystem],
     },
   },
 };
 
-// Special overrides for specific cross-brand categories
-// Some components (chains, cassettes) have broader compatibility
+// ─── Cross-group overrides with sources ──────────────────────────────────────
 const CROSS_GROUP_OVERRIDES: {
   fromGroup: string;
   toGroup: string;
@@ -203,83 +246,71 @@ const CROSS_GROUP_OVERRIDES: {
   status: CompatibilityStatus;
   explanation: string;
   adapter_name?: string;
+  sources: CompatibilitySource[];
 }[] = [
-  // 11-speed chains are broadly compatible (KMC, etc.) — but we represent stock
-  // Note: A Shimano 11s chain works fine on SRAM 11s cassettes
   {
     fromGroup: 'shimano-11s-road',
     toGroup: 'sram-11s-road',
     category: 'chain',
     status: 'compatible',
-    explanation: 'Shimano and SRAM 11-speed chains share the same 5.62 mm width and are interchangeable.',
+    explanation: 'Shimano und SRAM 11-Gang Ketten teilen die gleiche Breite (5,62 mm) und sind austauschbar.',
+    sources: [SOURCES.shimano_road_rear_drivetrain],
   },
   {
     fromGroup: 'sram-11s-road',
     toGroup: 'shimano-11s-road',
     category: 'chain',
     status: 'compatible',
-    explanation: 'Shimano and SRAM 11-speed chains share the same 5.62 mm width and are interchangeable.',
+    explanation: 'Shimano und SRAM 11-Gang Ketten teilen die gleiche Breite (5,62 mm) und sind austauschbar.',
+    sources: [SOURCES.sram_11s_compatibility],
   },
-  // Shimano 11s cassette on SRAM 11s (same HG freehub)
   {
     fromGroup: 'shimano-11s-road',
     toGroup: 'sram-11s-road',
     category: 'cassette',
     status: 'compatible',
-    explanation: 'Both use HG-compatible freehub body (Shimano 11s cassette fits SRAM 11s freehub).',
+    explanation: 'Beide verwenden HG-kompatiblen Freilaufkörper (Shimano 11-Gang Kassette passt auf SRAM 11-Gang Freilaufkörper).',
+    sources: [SOURCES.shimano_freehub_cassette],
   },
   {
     fromGroup: 'sram-11s-road',
     toGroup: 'shimano-11s-road',
     category: 'cassette',
     status: 'compatible',
-    explanation: 'Both use HG-compatible freehub body (SRAM 11s cassette fits Shimano 11s freehub).',
+    explanation: 'Beide verwenden HG-kompatiblen Freilaufkörper (SRAM 11-Gang Kassette passt auf Shimano 11-Gang Freilaufkörper).',
+    sources: [SOURCES.shimano_freehub_cassette],
   },
-  // Bottom brackets — BSA is universal among BSA frames
-  // Campagnolo UT-BSA works on BSA frames (standard threaded)
   {
     fromGroup: 'campagnolo-11s',
     toGroup: 'shimano-11s-road',
     category: 'bottom_bracket',
     status: 'adapter',
-    explanation: 'Campagnolo Ultra-Torque uses a different spindle interface (25 mm) than Shimano Hollowtech II (24 mm). Frame BB shell standard is independent, but crankset must match BB.',
-    adapter_name: 'Compatible BSA shell, but crankset-specific BB required',
+    explanation: 'Campagnolo Ultra-Torque verwendet eine andere Spindeldurchmesser (25 mm) als Shimano Hollowtech II (24 mm). Das Rahmen-Tretlagergehäuse ist unabhängig, aber die Kurbel muss zum Tretlager passen.',
+    adapter_name: 'Kompatibler BSA-Sitz, aber kurbelspezifisches Tretlager erforderlich',
+    sources: [],
   },
 ];
 
 // ─── Main compatibility check function ───────────────────────────────────────
-
 export function checkCompatibility(
   targetGroupsetId: string
-): {
-  groupset: Groupset;
-  byCategory: Record<string, CompatibilityResult[]>;
-} | null {
+): { groupset: Groupset; byCategory: Record<string, CompatibilityResult[]> } | null {
   const targetGroupset = getGroupsetById(targetGroupsetId);
   if (!targetGroupset) return null;
 
   const byCategory: Record<string, CompatibilityResult[]> = {};
-
-  for (const category of CATEGORY_ORDER) {
-    byCategory[category] = [];
-  }
+  for (const category of CATEGORY_ORDER) byCategory[category] = [];
 
   for (const component of components) {
     const componentGroupset = getGroupsetById(component.groupset_id);
     if (!componentGroupset) continue;
-
-    // Skip showing the target groupset's own components (those are always compatible,
-    // shown separately). Actually we DO want to show them as compatible.
     const result = evaluateCompatibility(component, componentGroupset, targetGroupset);
     byCategory[component.category].push(result);
   }
 
-  // Sort each category: compatible first, then adapter, then incompatible
   const order: CompatibilityStatus[] = ['compatible', 'adapter', 'incompatible'];
   for (const category of CATEGORY_ORDER) {
-    byCategory[category].sort(
-      (a, b) => order.indexOf(a.status) - order.indexOf(b.status)
-    );
+    byCategory[category].sort((a, b) => order.indexOf(a.status) - order.indexOf(b.status));
   }
 
   return { groupset: targetGroupset, byCategory };
@@ -293,12 +324,8 @@ function evaluateCompatibility(
   const fromGroup = componentGroupset.compatibility_group;
   const toGroup = targetGroupset.compatibility_group;
 
-  // Check cross-group overrides first
   const override = CROSS_GROUP_OVERRIDES.find(
-    (o) =>
-      o.fromGroup === fromGroup &&
-      o.toGroup === toGroup &&
-      o.category === component.category
+    (o) => o.fromGroup === fromGroup && o.toGroup === toGroup && o.category === component.category
   );
   if (override) {
     return {
@@ -307,17 +334,18 @@ function evaluateCompatibility(
       status: override.status,
       explanation: override.explanation,
       adapter_name: override.adapter_name,
+      sources: override.sources,
     };
   }
 
-  // Look up group rule
   const groupRule = GROUP_RULES[fromGroup]?.[toGroup];
   if (!groupRule) {
     return {
       component,
       groupset: componentGroupset,
       status: 'incompatible',
-      explanation: 'No compatibility data available for this combination.',
+      explanation: 'Keine Kompatibilitätsdaten für diese Kombination verfügbar.',
+      sources: [],
     };
   }
 
@@ -327,6 +355,7 @@ function evaluateCompatibility(
     status: groupRule.status,
     explanation: groupRule.explanation,
     adapter_name: groupRule.adapter_name,
+    sources: groupRule.sources,
   };
 }
 
@@ -334,8 +363,7 @@ export function getCompatibleGroupsets(targetGroupsetId: string): Groupset[] {
   const target = getGroupsetById(targetGroupsetId);
   if (!target) return [];
   return groupsets.filter(
-    (g) =>
-      GROUP_RULES[g.compatibility_group]?.[target.compatibility_group]?.status === 'compatible'
+    (g) => GROUP_RULES[g.compatibility_group]?.[target.compatibility_group]?.status === 'compatible'
   );
 }
 

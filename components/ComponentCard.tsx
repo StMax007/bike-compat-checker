@@ -1,5 +1,6 @@
-import { Component, CompatibilityStatus } from '@/lib/types';
+import { Component, CompatibilityStatus, CompatibilitySource } from '@/lib/types';
 import StatusBadge from './StatusBadge';
+import SourceCitation from './SourceCitation';
 import { ExternalLink, ShoppingCart } from 'lucide-react';
 
 interface ComponentCardProps {
@@ -7,6 +8,7 @@ interface ComponentCardProps {
   status: CompatibilityStatus;
   explanation: string;
   adapter_name?: string;
+  sources?: CompatibilitySource[];
   selectable?: boolean;
   selected?: boolean;
   onToggle?: (component: Component) => void;
@@ -17,6 +19,7 @@ export default function ComponentCard({
   status,
   explanation,
   adapter_name,
+  sources,
   selectable = false,
   selected = false,
   onToggle,
@@ -67,7 +70,9 @@ export default function ComponentCard({
         </div>
       )}
 
-      <div className="flex items-center justify-between">
+      <SourceCitation sources={sources ?? []} />
+
+      <div className="mt-3 flex items-center justify-between">
         <span className="text-sm font-semibold text-gray-900 dark:text-white">€{component.price_eur}</span>
         <a
           href={component.affiliate_url}

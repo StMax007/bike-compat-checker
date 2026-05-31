@@ -72,7 +72,7 @@ export default function BudgetPage() {
                     </div>
                     <div className="grid gap-3 p-5 sm:grid-cols-2">
                       {items.map((result) => (
-                        <ComponentCard key={result.component.id} component={result.component} status={result.status} explanation={result.explanation} adapter_name={result.adapter_name} selectable selected={isSelected(result.component)} onToggle={toggleCart} />
+                        <ComponentCard key={result.component.id} component={result.component} status={result.status} explanation={result.explanation} adapter_name={result.adapter_name} sources={result.sources} selectable selected={isSelected(result.component)} onToggle={toggleCart} />
                       ))}
                     </div>
                   </div>

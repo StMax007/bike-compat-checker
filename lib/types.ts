@@ -55,6 +55,18 @@ export interface CompatibilityResult {
   status: CompatibilityStatus;
   explanation: string;
   adapter_name?: string;
+  sources?: CompatibilitySource[];
+}
+
+export interface CompatibilitySource {
+  manufacturer: string;
+  document: string;
+  url?: string;
+  page?: string;
+  section?: string;
+  quote?: string;
+  /** Short label shown in the badge, e.g. "Shimano DM-R7000, S. 12" */
+  label: string;
 }
 
 export interface CompatibilityCheckResult {
