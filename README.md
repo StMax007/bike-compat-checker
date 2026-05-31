@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BikeCompat – Road Bike Component Compatibility Checker
 
-## Getting Started
+A production-ready web app for road cyclists to check component compatibility across groupsets and estimate upgrade costs.
 
-First, run the development server:
+🚀 **Live at:** https://bike-compat-checker.vercel.app
+
+## Features
+
+- **Compatibility Checker** – Select any groupset and instantly see which components are compatible, need an adapter, or are incompatible
+- **Budget Calculator** – Click to select components and get a real-time cost estimate
+- **18 Groupsets** – Shimano (R7000–R9200), SRAM (Rival/Force/Red 22 + AXS), Campagnolo (Chorus/Record/Super Record 11s + 12s)
+- **9 Component Categories** – Shifters, derailleurs, cassettes, chains, cranksets, BBs, brakes
+- **Affiliate Links** – Buy links to bike-components.de on every component card
+- Dark mode, mobile responsive, instant results
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Deployment**: Vercel
+
+## Covered Groupsets
+
+| Brand | 11-speed | 12-speed |
+|-------|----------|----------|
+| Shimano | 105 R7000, Ultegra R8000, Dura-Ace R9100 | 105 R7100 Di2, Ultegra R8100 Di2, Dura-Ace R9200 Di2 |
+| SRAM | Rival 22, Force 22, Red 22 | Rival AXS, Force AXS, Red AXS |
+| Campagnolo | Chorus, Record, Super Record (11s) | Chorus, Record, Super Record (12s / N3W) |
+
+## Key Compatibility Rules
+
+- Shimano 11s (R7000/R8000/R9100): fully cross-compatible
+- Shimano 12s Di2 (R7100/R8100/R9200): fully cross-compatible, not backward-compatible
+- SRAM 11s AXS: closed ecosystem, XDR freehub required
+- Campagnolo 12s: requires N3W freehub standard
+- 11s and 12s chains are NOT interchangeable
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Affiliate Disclosure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Component cards include links to bike-components.de. These are affiliate links.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with ❤️ for road cyclists
