@@ -43,7 +43,7 @@ export default function BudgetPage() {
     <div className="mx-auto max-w-6xl px-4 py-10">
       <div className="mb-8">
         <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Budget-Rechner</h1>
-        <p className="text-gray-500 dark:text-neutral-400">Wähle kompatible Komponenten, um deine Upgrade-Kosten zu schätzen.</p>
+      <p className="text-gray-500 dark:text-neutral-400">Wähle kompatible Komponenten und Laufräder, um deine Upgrade-Kosten zu schätzen.</p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">

@@ -291,6 +291,46 @@ const CROSS_GROUP_OVERRIDES: {
   },
 ];
 
+function getWheelSource(freehubStandard: Groupset['freehub_standard']): CompatibilitySource[] {
+  switch (freehubStandard) {
+    case 'hg':
+      return [SOURCES.shimano_freehub_cassette];
+    case 'xdr':
+      return [SOURCES.sram_xdr_freehub];
+    case 'n3w':
+      return [SOURCES.campagnolo_n3w];
+    default:
+      return [];
+  }
+}
+
+function evaluateWheelCompatibility(
+  component: Component,
+  componentGroupset: Groupset,
+  targetGroupset: Groupset
+): CompatibilityResult {
+  const freehubStandard = component.freehub_standard ?? componentGroupset.freehub_standard;
+  const sources = getWheelSource(freehubStandard);
+
+  if (freehubStandard === targetGroupset.freehub_standard) {
+    return {
+      component,
+      groupset: componentGroupset,
+      status: 'compatible',
+      explanation: `Laufrad mit ${freehubStandard.toUpperCase()}-Freilaufkörper passt zu diesem Groupset.`,
+      sources,
+    };
+  }
+
+  return {
+    component,
+    groupset: componentGroupset,
+    status: 'incompatible',
+    explanation: `Laufrad mit ${freehubStandard.toUpperCase()}-Freilaufkörper passt nicht zu ${targetGroupset.name}; dieses Groupset benötigt ${targetGroupset.freehub_standard.toUpperCase()}.`,
+    sources,
+  };
+}
+
 // ─── Main compatibility check function ───────────────────────────────────────
 export function checkCompatibility(
   targetGroupsetId: string
@@ -323,6 +363,10 @@ function evaluateCompatibility(
 ): CompatibilityResult {
   const fromGroup = componentGroupset.compatibility_group;
   const toGroup = targetGroupset.compatibility_group;
+
+  if (component.category === 'wheel') {
+    return evaluateWheelCompatibility(component, componentGroupset, targetGroupset);
+  }
 
   const override = CROSS_GROUP_OVERRIDES.find(
     (o) => o.fromGroup === fromGroup && o.toGroup === toGroup && o.category === component.category

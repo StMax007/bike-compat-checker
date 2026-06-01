@@ -3,6 +3,7 @@ export type CompatibilityStatus = 'compatible' | 'adapter' | 'incompatible';
 export type ComponentCategory =
   | 'chain'
   | 'cassette'
+  | 'wheel'
   | 'rear_derailleur'
   | 'front_derailleur'
   | 'crankset'
@@ -37,6 +38,7 @@ export interface Component {
   model_number: string;
   price_eur: number;
   affiliate_url: string;
+  freehub_standard?: FreehubStandard;
   description?: string;
 }
 
@@ -77,6 +79,7 @@ export interface CompatibilityCheckResult {
 export const CATEGORY_LABELS: Record<ComponentCategory, string> = {
   chain: 'Kette',
   cassette: 'Kassette',
+  wheel: 'Laufrad',
   rear_derailleur: 'Hinteres Schaltwerk',
   front_derailleur: 'Vorderes Schaltwerk',
   crankset: 'Kurbelgarnitur',
@@ -91,6 +94,7 @@ export const CATEGORY_ORDER: ComponentCategory[] = [
   'rear_derailleur',
   'front_derailleur',
   'cassette',
+  'wheel',
   'chain',
   'crankset',
   'bottom_bracket',

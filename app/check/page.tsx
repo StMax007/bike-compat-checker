@@ -59,7 +59,7 @@ export default function CheckPage() {
       <div className="mb-8">
         <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Kompatibilitätsprüfer</h1>
         <p className="text-gray-500 dark:text-neutral-400">
-          Wähle deine Schaltgruppe, um den Kompatibilitätsstatus aller Komponenten zu sehen.
+          Wähle deine Schaltgruppe, um den Kompatibilitätsstatus aller Komponenten und Laufräder zu sehen.
         </p>
       </div>
 
